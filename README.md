@@ -1,9 +1,11 @@
 # PalChat
 
 **Purpose**
+
 Main purpose of this project is to connect with all your best pals who miss you, who are closer to you from all around the world.
 
 **Description**
+
 This mobile application provides a chat platform where one group of pals can chat with everyone with ease also providing the admin functionalities to invite other pals who missed to invite as well as deleting the chat whenever want.
 
 **Main Fuunctionalities**
