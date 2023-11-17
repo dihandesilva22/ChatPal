@@ -2,7 +2,7 @@
 
 **Purpose**
 
-Main purpose of this project is to connect with all your best pals who miss you, who are closer to you from all around the world.
+Main purpose of this project is to create a platform to connect with all your best pals who miss you, who are closer to you from all around the world.
 
 **Description**
 
