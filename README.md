@@ -1,4 +1,4 @@
-# PalChat
+#ChatPal
 
 **Purpose**
 
