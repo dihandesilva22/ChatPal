@@ -1,0 +1,8 @@
+{
+  "appId": "com.example.chatpal",
+  "appName": "chat-pal",
+  "webDir": "frontend/build",
+  "server": {
+    "androidScheme": "https"
+  }
+}
