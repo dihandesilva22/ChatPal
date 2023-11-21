@@ -3,11 +3,28 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import Dashboard from './routes/Dashboard';
+import WelcomePage from './routes/WelcomePage';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<App/>}>
+          <Route path='' element={<WelcomePage />}></Route>
+          <Route path='/dashboard' element={<Dashboard />}></Route>
+          <Route path='*' element={
+            <main>
+              <h1>Page Not Found!</h1>
+              <Link to={<Dashboard />}>Go back to Dashboard</Link>
+              </main>
+          }></Route>
+        </Route>
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 );
 
