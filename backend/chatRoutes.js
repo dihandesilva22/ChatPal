@@ -1,16 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const admin = require('firebase-admin');
-
-const serviceAccount = require('./serviceAccountKey.json');
-
-//initialize the admin SDK
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
-
-//get access to the firebase database
-const db = admin.firestore();
+const db = require('./adminSDKConfig');
 
 router.get('/getAllMessages', (req, res) => { 
   try{
@@ -74,12 +64,12 @@ try{
   console.log(currentTime);
   // Convert JavaScript Date object to Firestore timestamp
   const sentTime = admin.firestore.Timestamp.fromDate(currentTime);
-  console.log(sentTime);
+  // console.log(sentTime);
   const chatMessageData = {
-    user : db.collection('users').doc(userID),
+    user : db.collection('users').doc(userID),   //userReference
     message : message,
     sentOn : sentTime,
-    chat : db.collection('chats').doc(chatID)
+    chat : db.collection('chats').doc(chatID)   //chatReference
   }
 
   db.collection('chatMessages').add(chatMessageData)
