@@ -1,6 +1,8 @@
 import { CgMoreVerticalAlt } from "react-icons/cg";
 import { IoSend } from "react-icons/io5";
 import { IoIosArrowBack } from "react-icons/io";
+import ReceivedChatMessage from "../components/ReceivedChatMessage";
+import SentChatMessage from "../components/SentChatMessage";
 
 const Chat = () => {
 
@@ -31,38 +33,21 @@ const Chat = () => {
                         </h2>
                     </div>
 
-                    {/* Message send by others */}
-                    <div className="chat-bubble max-w-[40%] bg-slate-200 rounded-tl-none rounded-xl px-4 py-2 mb-4">
-                        <h4 className="font-medium text-[#006399]">Sender Name</h4>
-                        <p className="whitespace-normal text-justify">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                            Iusto tempore eligendi recusandae nihil beatae! Ex distinctio accusamus magnam ratione?
-                            Delectus alias dolores eos ullam aut molestias facilis sint voluptatem aspernatur.
-                        </p>
-                        <h4 className="font-regular text-sm text-gray-500 text-right">12:34</h4>
-                    </div>
 
                     {/* Message send by others */}
-                    <div className="chat-bubble max-w-[40%] bg-slate-200 rounded-tl-none rounded-xl px-4 py-2 mb-4">
-                        <h4 className="font-medium text-[#006399]">Sender Name</h4>
-                        <p className="whitespace-normal text-justify">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                            Iusto tempore eligendi recusandae nihil beatae! Ex distinctio accusamus magnam ratione?
-                            Delectus alias dolores eos ullam aut molestias facilis sint voluptatem aspernatur.
-                        </p>
-                        <h4 className="font-regular text-sm text-gray-500 text-right">12:34</h4>
-                    </div>
+                    <ReceivedChatMessage 
+                        sender={"John Doe"}
+                        message={"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto tempore eligendi recusandae nihil beatae!"}
+                        sent_time={"12.40"}
+                    />
+                   
 
                     {/* Message send by user(me) */}
-                    <div className="chat-bubble max-w-[40%] bg-slate-200 rounded-br-none rounded-xl px-4 py-2 mb-4 float-right">
-                        <h4 className="font-medium text-[#006399]">Sender Name</h4>
-                        <p className="whitespace-normal text-justify">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                            Iusto tempore eligendi recusandae nihil beatae! Ex distinctio accusamus magnam ratione?
-                            Delectus alias dolores eos ullam aut molestias facilis sint voluptatem aspernatur.
-                        </p>
-                        <h4 className="font-regular text-sm text-gray-500 text-right">12:34</h4>
-                    </div>
+                    <SentChatMessage 
+                        message={"Ex distinctio accusamus magnam ratione? Delectus alias dolores eos ullam aut molestias facilis sint voluptatem aspernatur."}
+                        sent_time={"14.58"}
+                    />
+
                 </div>
             </div>
 
