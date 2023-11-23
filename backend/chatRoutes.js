@@ -18,12 +18,9 @@ router.get('/chat-list', (req, res) => {
                     const chat = {}
                     const data = doc.data();
 
+                    chat.chatID = doc.id;
                     chat.chatName = data.name;
                     chat.status = data.status;
-
-                    const userDoc = await data.admin.get();
-                    const userID = userDoc.id;
-                    chat.adminID = userID;
 
                     chatList.push(chat);
                 }
