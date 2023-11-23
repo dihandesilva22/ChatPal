@@ -1,14 +1,21 @@
-import { useNavigate } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
+import '../css/dashboard.css';
+import ChatList from "./ChatList";
+import { useState } from "react";
 
 const Dashboard = () => {
 
-    const navigate = useNavigate();
+    const [active, setActive] = useState(true);
 
-    const handleViewClick = () => {
-
-        navigate('/chat');
-
+    const handleActiveChats = () =>{
+        document.getElementById('active-chats').classList.add('active');
+        document.getElementById('previous-chats').classList.remove('active');
+        setActive(true);
+    }
+    const handlePreviousChats = () => {
+        document.getElementById('previous-chats').classList.add('active');
+        document.getElementById('active-chats').classList.remove('active');
+        setActive(false);
     }
 
     return (
@@ -24,30 +31,20 @@ const Dashboard = () => {
                     Hello User!
                 </h2>
 
-                <h2 className="text-lg font-semibold py-1.5 px-3 text-[#001D32] bg-[#CDE5FF] rounded-t-md">
-                    Active Chats
-                </h2>
-                <hr className="text-[#001D32]" />
-
-                <div className="flex items-center py-7">
-                    <p className="font-medium pl-3">
-                        Chat Name
-                    </p>
-                    <button className="float-right bg-[#001D32] text-white text-sm px-3 py-0.5 rounded-md ml-auto" onClick={handleViewClick}>
-                        View
-                    </button>
+                <div id="chat-list">
+                    <ChatList activeStatus={active} />
                 </div>
 
                 <div className="fixed left-0 bottom-0 w-full">
 
-                    <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
-                        <li class="me-2">
-                            <a href="#" aria-current="page" class="inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500">
-                                Active Chats</a>
+                    <ul className="flex w-full text-md font-medium text-center">
+                        <li id="active-chats" className="me-0 py-3 w-1/2 border border-neutral-300 border-b-0 active rounded-t-lg bg-gray-100 hover:text-gray-300 hover:bg-gray-800 cursor-pointer"
+                            onClick={handleActiveChats}>
+                            Active Chats
                         </li>
-                        <li class="me-2">
-                            <a href="#" class="inline-block p-4 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">
-                                Previous Chats</a>
+                        <li id="previous-chats" className="me-0 py-3 w-1/2 rounded-t-lg border border-b-0 border-neutral-300 bg-gray-100 hover:text-gray-300 hover:bg-gray-800 cursor-pointer"
+                            onClick={handlePreviousChats}>
+                            Previous Chats
                         </li>
                     </ul>
 
