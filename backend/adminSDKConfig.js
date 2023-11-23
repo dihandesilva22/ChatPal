@@ -1,5 +1,3 @@
-const express = require('express');
-const router = express.Router();
 const admin = require('firebase-admin');
 
 const serviceAccount = require('./serviceAccountKey.json');
@@ -12,4 +10,4 @@ admin.initializeApp({
 //get access to the firebase database
 const db = admin.firestore();
 
-module.exports = router;
+module.exports = db;
