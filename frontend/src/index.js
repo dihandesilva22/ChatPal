@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Dashboard from './routes/Dashboard';
 import WelcomePage from './routes/WelcomePage';
 import Chat from './routes/Chat';
+import ChatCreationPage from './routes/ChatCreationPage';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -18,6 +19,7 @@ root.render(
           <Route path='' element={<WelcomePage />}></Route>
           <Route path='/dashboard' element={<Dashboard />}></Route>
           <Route path='/chat' element={<Chat />}></Route>
+          <Route path='/new-chat' element={<ChatCreationPage />}></Route>
           <Route path='*' element={
             <main>
               <h1>Page Not Found!</h1>
