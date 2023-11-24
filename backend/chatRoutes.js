@@ -59,23 +59,21 @@ try{
   const userID = req.body.userID;
   const chatID = req.body.chatID;
   const message = req.body.message;
-
+  // console.log(chatID);
+  // console.log(chatID.toString());
   const currentTime = new Date();
   console.log(currentTime);
-  // Convert JavaScript Date object to Firestore timestamp
-  const sentTime = admin.firestore.Timestamp.fromDate(currentTime);
-  // console.log(sentTime);
   const chatMessageData = {
     user : db.collection('users').doc(userID),   //userReference
     message : message,
-    sentOn : sentTime,
+    sentOn : currentTime,
     chat : db.collection('chats').doc(chatID)   //chatReference
   }
 
   db.collection('chatMessages').add(chatMessageData)
   .then((docRef) => {
     console.log("New document created successfully");
-    res.status(200).json(docRef.id);
+    res.status(200).json({state:"Successful"});
   })
 }catch(error){
   console.log("There is an error");
