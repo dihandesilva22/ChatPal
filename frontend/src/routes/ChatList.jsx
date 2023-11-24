@@ -31,17 +31,21 @@ const ChatList = ({ activeStatus }) => {
 
   useEffect(() => {
     if (activeStatus === true) {
-        setTopic("Active Chats");
-        setRequiredChats(activeChats);
+      setTopic("Active Chats");
+      setRequiredChats(activeChats);
     } else {
-        setTopic("Previous Chats");
-        setRequiredChats(previousChats);
+      setTopic("Previous Chats");
+      setRequiredChats(previousChats);
     }
   }, [activeStatus, activeChats, previousChats]);
 
 
   const handleViewClick = (id) => {
     navigate(`/chat/${id}`);
+  }
+
+  const handleCreateClick = () => {
+    navigate('/new-chat')
   }
 
   return (
@@ -51,19 +55,30 @@ const ChatList = ({ activeStatus }) => {
       </h2>
       <hr className="text-[#001D32]" />
 
-      {requiredChats.map((chat, id) => (
-        <div className="flex items-center pt-5" key={id}>
-          <p className="font-medium pl-3">
-            {chat.chatName}
-          </p>
-          <button
-            className="float-right bg-[#001D32] text-white text-sm px-3 py-0.5 rounded-md ml-auto"
-            onClick={() => handleViewClick(chat.chatID)}
-          >
-            View
-          </button>
-        </div>
-      ))}
+      {
+        (requiredChats.length === 0 && activeStatus === false) ? (
+          <p className="py-3">No previous chats</p>
+        ) : (
+        requiredChats.length === 0 && activeStatus === true) ? (
+          <div className="flex py-4">
+            <p className="">No active chats</p>
+            <button className="bg-[#001D32] py-0.5 px-3 text-white rounded-md ml-auto text-sm" onClick={handleCreateClick}>
+              Create
+              </button>
+          </div>
+        ) : (
+          requiredChats.map((chat, id) => (
+            <div className="flex items-center pt-5" key={id}>
+              <p className="font-medium pl-3">{chat.chatName}</p>
+              <button
+                className="float-right bg-[#001D32] text-white text-sm px-3 py-0.5 rounded-md ml-auto"
+                onClick={() => handleViewClick(chat.chatID)}
+              >
+                View
+              </button>
+            </div>
+          ))
+        )}
     </>
   );
 };
