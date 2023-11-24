@@ -1,25 +1,18 @@
 const express = require('express');
-<<<<<<< Updated upstream
-const router = require('./routes.js');
-=======
-const userRouter = require('./userRoutes.js');
+const cors = require('cors');
 const chatsRouter = require('./chatRoutes.js');
-
->>>>>>> Stashed changes
+const userRouter = require('./userRoutes.js');
 
 const app = express();
 const port = 4000;
+
+app.use(express.json()); // for parsing application/json
+app.use(cors());
 
 app.listen(port, ()=> {
   console.log('App is listening on PORT '+port);
 })
 
-<<<<<<< Updated upstream
-app.use('/',router);
-
-
-
-=======
-app.use('/user',userRouter);
 app.use('/chat',chatsRouter);
->>>>>>> Stashed changes
+app.use('/user',userRouter);
+
