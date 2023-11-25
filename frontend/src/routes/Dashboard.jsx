@@ -1,4 +1,3 @@
-import { IoIosArrowBack } from "react-icons/io";
 import '../css/dashboard.css';
 import ChatList from "./ChatList";
 import { useState } from "react";
@@ -7,7 +6,7 @@ const Dashboard = () => {
 
     const [active, setActive] = useState(true);
 
-    const handleActiveChats = () =>{
+    const handleActiveChats = () => {
         document.getElementById('active-chats').classList.add('active');
         document.getElementById('previous-chats').classList.remove('active');
         setActive(true);
@@ -21,15 +20,17 @@ const Dashboard = () => {
     return (
         <>
             <div className='bg-[#006399] py-4 sticky top-0 left-0 right-0 z-20'>
-                <button className='float-left px-3'>
-                    <IoIosArrowBack className='text-3xl font-semibold pt-1 text-white' />
-                </button>
                 <h1 className='text-2xl font-semibold pl-5 text-white'>ChatPal</h1>
             </div>
             <div className="w-full px-4 py-2">
                 <h2 className="text-2xl font-semibold py-7 text-[#001D32]">
                     Hello User!
                 </h2>
+
+                <h2 className="text-lg font-semibold py-1.5 px-3 text-[#001D32] bg-[#CDE5FF] rounded-t-md">
+                    { active ? "Active Chats" : "Previous Chats" }
+                </h2>
+                <hr className="text-[#001D32]" />
 
                 <div id="chat-list">
                     <ChatList activeStatus={active} />
