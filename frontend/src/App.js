@@ -3,6 +3,7 @@ import { Routes, Route, Link } from 'react-router-dom';
 import Dashboard from './routes/Dashboard';
 import WelcomePage from './routes/WelcomePage';
 import Chat from './routes/Chat';
+import ChatCreationPage from './routes/ChatCreationPage';
 
 function App() {
   return (
