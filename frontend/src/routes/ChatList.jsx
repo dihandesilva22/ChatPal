@@ -6,7 +6,6 @@ const ChatList = ({ activeStatus }) => {
 
   const [loading, setLoading] = useState(true); // New loading state
   const [chats, setChats] = useState([]);
-  const [topic, setTopic] = useState();
   const [activeChats, setActiveChats] = useState([]);
   const [previousChats, setPreviousChats] = useState([]);
   const [requiredChats, setRequiredChats] = useState([]);
@@ -34,10 +33,8 @@ const ChatList = ({ activeStatus }) => {
 
   useEffect(() => {
     if (activeStatus === true) {
-      setTopic("Active Chats");
       setRequiredChats(activeChats);
     } else {
-      setTopic("Previous Chats");
       setRequiredChats(previousChats);
     }
   }, [activeStatus, activeChats, previousChats]);
@@ -52,11 +49,6 @@ const ChatList = ({ activeStatus }) => {
 
   return (
     <>
-
-      <h2 className="text-lg font-semibold py-1.5 px-3 text-[#001D32] bg-[#CDE5FF] rounded-t-md">
-        {topic}
-      </h2>
-      <hr className="text-[#001D32]" />
 
       {loading ? (
         <p className="py-4 px-3">Loading...</p>

@@ -6,7 +6,7 @@ const Dashboard = () => {
 
     const [active, setActive] = useState(true);
 
-    const handleActiveChats = () =>{
+    const handleActiveChats = () => {
         document.getElementById('active-chats').classList.add('active');
         document.getElementById('previous-chats').classList.remove('active');
         setActive(true);
@@ -26,6 +26,11 @@ const Dashboard = () => {
                 <h2 className="text-2xl font-semibold py-7 text-[#001D32]">
                     Hello User!
                 </h2>
+
+                <h2 className="text-lg font-semibold py-1.5 px-3 text-[#001D32] bg-[#CDE5FF] rounded-t-md">
+                    { active ? "Active Chats" : "Previous Chats" }
+                </h2>
+                <hr className="text-[#001D32]" />
 
                 <div id="chat-list">
                     <ChatList activeStatus={active} />

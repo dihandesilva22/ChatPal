@@ -1,4 +1,4 @@
-import { CgMoreVerticalAlt } from "react-icons/cg";
+import { MdDelete } from "react-icons/md";
 import { IoSend } from "react-icons/io5";
 import { IoIosArrowBack } from "react-icons/io";
 import { useEffect, useState } from "react";
@@ -54,7 +54,7 @@ const Chat = () => {
     const saveContent = (e) => {
         setContent(e.target.value);
     }
-    
+
     // const chatContainerRef = useRef(null);
 
     // useEffect(() => {
@@ -103,12 +103,15 @@ const Chat = () => {
             <div className="chat-header top-0 fixed w-full z-10">
                 <div className='pt-4 pb-5 px-4 flex items-center bg-[#CDE5FF]'>
                     <button className='float-left px-3 cursor-pointer'>
-                        <IoIosArrowBack className='text-3xl font-semibold pt-0.5 text-[#001D32]' onClick={() => navigate(-1)} />
+                        <IoIosArrowBack className='text-3xl font-semibold pt-0.5 text-[#001D32]' onClick={() => navigate('/dashboard')} />
                     </button>
                     <h2 className="text-xl font-medium text-[#001D32]">Chat Name</h2>
-                    <button className='ml-auto'>
-                        <CgMoreVerticalAlt className='text-2xl font-semibold text-[#001D32] pt-0.5' />
-                    </button>
+                    {(
+                        <button className='ml-auto'>
+                            <MdDelete className='text-2xl font-semibold text-[#001D32] pt-0.5' />
+                        </button>
+                    )}
+
                 </div>
                 <hr />
             </div>
@@ -123,7 +126,6 @@ const Chat = () => {
                             <h4 className="font-medium text-[#006399]">{message.user}</h4>
                             <p className="whitespace-normal text-justify">{message.content}</p>
                             <h4 className="font-regular text-sm text-gray-500 text-right">{message.sentTime.toString().split(" ")[4]}</h4>
-
                         </div>
                     ))}
 
