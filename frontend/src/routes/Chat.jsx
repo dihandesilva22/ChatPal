@@ -1,4 +1,4 @@
-import { MdDelete } from "react-icons/md";
+import { MdDeleteForever } from "react-icons/md";
 import { IoSend } from "react-icons/io5";
 import { IoIosArrowBack } from "react-icons/io";
 import { useEffect, useState } from "react";
@@ -108,7 +108,7 @@ const Chat = () => {
                     <h2 className="text-xl font-medium text-[#001D32]">Chat Name</h2>
                     {(
                         <button className='ml-auto'>
-                            <MdDelete className='text-2xl font-semibold text-[#001D32] pt-0.5' />
+                            <MdDeleteForever className='text-2xl font-semibold text-[#001D32] pt-0.5' />
                         </button>
                     )}
 
