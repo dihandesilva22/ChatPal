@@ -137,7 +137,7 @@ router.post('/create-chat', (req, res) => {
                     console.log("Successfully created a new chat");
                     // console.log(chatRef.id);
                     // console.log(chatRef.admin);
-                    res.status(200).json({"chatID": chatRef.id});
+                    res.status(200).json({state:"Successful"});
                 })
             }
         })
