@@ -15,6 +15,7 @@ const Chat = () => {
 
     const [messages, setMessages] = useState([]);
     const [content, setContent] = useState("");
+    const [status, setStatus] = useState("");
     const [error, setError] = useState();
 
     useEffect(() => {
@@ -63,6 +64,26 @@ const Chat = () => {
     //         chatContainer.scrollTop = chatContainer.scrollHeight;
     //     }
     // }, [messages]);
+
+    const queryParams = new URLSearchParams(window.location.search);
+    const chatID = queryParams.get('id')
+
+    useEffect(() => {
+        // Fetch chat status based on the chat ID
+        const fetchChatStatus = async () => {
+            try {
+                const response = await fetch(`http://localhost:4000/chat/getStatus?chatID=${chatID}`);
+                const data = await response.json();
+                setStatus(data.status); // Assuming your API response has a 'status' property
+            } catch (error) {
+                console.error('Error fetching chat status:', error);
+            }
+        };
+
+        if (chatID) {
+            fetchChatStatus();
+        }
+    }, [chatID]);
 
     const handleClick = () => {
         if (messages === "") {
@@ -144,16 +165,20 @@ const Chat = () => {
 
                 </div>
 
-                {/* Write message */}
-                <div id="message-input" className="flex fixed bottom-0 left-0 items-center px-3 py-5 gap-2 w-full bg-[#CDE5FF]">
-                    <input onChange={saveContent} value={content} name="content" className="w-full border border-[#001D32] rounded-md px-3 py-1" placeholder="Type Your Message Here" />
-                    <button onClick={handleClick} className="float-right bg-[#001D32] border text-white text-lg p-3 rounded-[50%] ml-auto">
-                        <IoSend />
-                    </button>
-                </div>
-
+                {status ? ( 
+                    <div id="message-input" className="flex fixed bottom-0 left-0 items-center px-3 py-5 gap-2 w-full bg-[#CDE5FF]">
+                        <input onChange={saveContent} value={content} name="content" className="w-full border border-[#001D32] rounded-md px-3 py-1" placeholder="Type Your Message Here" />
+                        <button onClick={handleClick} className="float-right bg-[#001D32] border text-white text-lg p-3 rounded-[50%] ml-auto">
+                            <IoSend />
+                        </button>
+                    </div>
+                ) : (
+                    <div id="message-input" className="flex fixed text-center bottom-0 left-0 items-center px-3 py-5 gap-2 w-full bg-[#CDE5FF]">
+                        <p className="">No longer available for send messages</p>
+                    </div>
+                )}
             </div>
-        </div>
+        </div >
     )
 }
 

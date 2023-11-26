@@ -2,52 +2,58 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { IoIosArrowBack } from "react-icons/io";
 import Swal from 'sweetalert2';
+import { BiSolidError } from "react-icons/bi";
 
 const ChatCreationPage = () => {
 
     const [chatName, setChatName] = useState('');
+    const [error, setError] = useState('');
 
     const navigate = useNavigate();
 
+    const handleChange = (e) => {
+        setError('');
+        setChatName(e.target.value)
+    }
+
     const handleCreateClick = () => {
 
-        const postData = {
-            name: chatName,
-            userID: "ypAfGjaIrXjSRN5E1WRK"
-        }
-        
-        fetch('http://localhost:4000/chat/create-chat', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(postData),
-        })
-            .then(response => response.json())
-            .then(async data => {
-                
-                if (data.state === "Successful") {
-                    //console.log(data.state);
-                    Swal.fire({
-                        title: "New Chat Creation",
-                        text: "Chat Created Successfully!",
-                        icon: "success"
-                    }).then(() => {
-                        navigate('/chat');
-                    });
-                } else {
-                    Swal.fire({
-                        title: "New Chat Creation",
-                        text: "Chat Creation Unsuccessful!",
-                        icon: "error"
-                    }).then(() => {
-                        navigate('/dashboard');
-                    });
-                }
+        if (chatName === '') {
+            setError('Please enter a name for the chat');
+            return;
+        }else{
+            const postData = {
+                name: chatName,
+                userID: "ypAfGjaIrXjSRN5E1WRK"
+            }
+            
+            fetch('http://localhost:4000/chat/create-chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(postData),
             })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+                .then(response => response.json())
+                .then(async data => {
+                    
+                    if (data.state === "successful") {
+                        Swal.fire({
+                            title: "New Chat Creation",
+                            text: "Chat Created Successfully!",
+                            icon: "success"
+                        }).then(() => {
+                            navigate('/chat');
+                        });
+                    } else {
+                        setError("Try again with a different name");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    setError("Chat creation is not successful. Try again");
+                });
+        }
 
     }
 
@@ -65,10 +71,16 @@ const ChatCreationPage = () => {
                 </h2>
                 <div className='py-5 w-3/5'>
                     <input className='w-full px-3 py-0.5 border border-[#001D32] rounded-md' value={chatName}
-                        onChange={(e) => setChatName(e.target.value)}
+                        onChange={handleChange}
                         placeholder='Chat Name' /> 
                 </div>
-                <div className='justify-center flex py-3'>
+
+                <div className={`px-3 py-0.5 flex gap-1 bg-red-100 ${error === '' ? 'hidden' : ''} text-red-700 rounded`}>
+                    <BiSolidError className='font-bold text-lg pt-0.5'/>
+                    <p className='text-sm'>{error}</p>
+                </div>
+
+                <div className='justify-center flex pt-8 pb-3'>
                     <button className='px-4 py-1.5 bg-[#001D32] text-white rounded-lg text-sm' onClick={handleCreateClick}>
                         CREATE
                     </button>
