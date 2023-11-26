@@ -1,15 +1,18 @@
 import { useNavigate } from 'react-router-dom'
-import { IoIosArrowBack } from "react-icons/io";
 import { useEffect, useState } from "react";
 import { Storage } from '@capacitor/storage';
+import Swal from 'sweetalert2';
+import { BiSolidError } from "react-icons/bi";
 
 const WelcomePage = () => {
 
     const navigate = useNavigate();
+
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [error, setError] = useState(false);
+    const [error, setError] = useState('');
     // Pseudo code for checking stored token on app launch
+
 
     async function checkToken() {
         let jwtToken;
@@ -43,6 +46,7 @@ const WelcomePage = () => {
         }
     }
     const handleStartClick = () => {
+
         if (firstName === '' || lastName === '') {
             setError('First Name and Last Name fields are mandatory');
             return;
@@ -65,7 +69,15 @@ const WelcomePage = () => {
                         console.log(data);
                         const receivedToken = data.token;
                         await Storage.set({ key: 'jwtToken', value: receivedToken });
-                        navigate('/dashboard');
+                      
+                        Swal.fire({
+                            title: "User Account Creation",
+                            text: "User Account Created Successfully!",
+                            icon: "success"
+                        }).then(() => {
+                            navigate('/dashboard');
+                        });
+
                     }
                 })
                 .catch(error => {
@@ -86,13 +98,17 @@ const WelcomePage = () => {
                 <h2 className='text-xl font-semibold py-3 justify-center flex text-[#001D32]'>
                     Welcome to ChatPal!
                 </h2>
-      
-                <div className='py-5'>
-                    <input className='px-3 py-0.5 mb-3 border border-[#001D32]' type="text" onChange={handleChange} value={firstName} name="firstName" placeholder='First Name' /> <br />
-                    <input className='px-3 py-o.5 border border-[#001D32]' type="text" onChange={handleChange} value={lastName} name="lastName" placeholder='Last Name' />
+                <div className='py-5 w-3/5'>
+                    <input className='w-full px-3 py-0.5 mb-3 border border-[#001D32] rounded-md' type="text" onChange={handleChange} value={firstName} name="firstName" placeholder='First Name' /> <br />
+                    <input className='w-full px-3 py-0.5 border border-[#001D32] rounded-md' type="text" onChange={handleChange} value={lastName} name="lastName" placeholder='Last Name' />
                 </div>
-                <div> {error} </div>
-                <div className='justify-center flex py-3'>
+
+                <div className={`px-3 py-0.5 flex gap-1 bg-red-100 ${error === '' ? 'hidden' : ''} text-red-700 rounded`}>
+                    <BiSolidError className='font-bold text-lg pt-0.5'/>
+                    <p className='text-sm'>{error}</p>
+                </div>
+
+                <div className='justify-center flex pt-8 pb-3'>
                     <button className='text-sm px-4 py-1.5 bg-[#001D32] text-white rounded-md' onClick={handleStartClick}>
                         START
                     </button>

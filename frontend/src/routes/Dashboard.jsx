@@ -32,7 +32,7 @@ const Dashboard = () => {
                 </h2>
                 <hr className="text-[#001D32]" />
 
-                <div id="chat-list">
+                <div id="chat-list" className='overflow-auto'>
                     <ChatList activeStatus={active} />
                 </div>
 
