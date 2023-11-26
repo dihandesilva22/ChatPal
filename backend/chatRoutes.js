@@ -34,6 +34,30 @@ router.get('/chat-list', (req, res) => {
     }
 })
 
+
+router.get('/getStatus', async (req, res) => {
+  try {
+    const chatID = req.query.chatID;
+
+    const chatSnapshot = await db.collection('chats').doc(chatID).get();
+
+    if (chatSnapshot.exists) {
+      const chatStatus = chatSnapshot.data().status;
+      console.log('Chat Status:', chatStatus);
+
+      res.status(200).json({ status: chatStatus });
+    } else {
+      console.log('Cannot get the chat status');
+    }
+
+  } catch (error) {
+    console.log('An error occurred', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+
 router.get('/getAllMessages', (req, res) => { 
   try{
     // const chatID = "hscUcabi8UpRSC132egZ";
@@ -137,7 +161,7 @@ router.post('/create-chat', (req, res) => {
                     console.log("Successfully created a new chat");
                     // console.log(chatRef.id);
                     // console.log(chatRef.admin);
-                    res.status(200).json({state:"Successful"});
+                    res.status(200).json({state:"successful"});
                 })
             }
         })

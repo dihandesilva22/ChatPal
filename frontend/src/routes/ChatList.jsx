@@ -40,7 +40,7 @@ const ChatList = ({ activeStatus }) => {
   }, [activeStatus, activeChats, previousChats]);
 
   const handleViewClick = (id) => {
-    navigate(`/chat`);
+    navigate(`/chat/${id}`);
   };
 
   const handleCreateClick = () => {
