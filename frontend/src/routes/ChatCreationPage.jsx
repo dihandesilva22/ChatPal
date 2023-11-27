@@ -1,13 +1,16 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect,useState } from 'react';
 import { IoIosArrowBack } from "react-icons/io";
 import Swal from 'sweetalert2';
 import { BiSolidError } from "react-icons/bi";
+import { Storage } from '@capacitor/storage';
 
 const ChatCreationPage = () => {
 
     const [chatName, setChatName] = useState('');
     const [error, setError] = useState('');
+    const [user, setUser] = useState();
+    const [userID, setUserID] = useState();
 
     const navigate = useNavigate();
 
@@ -15,6 +18,31 @@ const ChatCreationPage = () => {
         setError('');
         setChatName(e.target.value)
     }
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const token = (await Storage.get({ key: 'jwtToken' })).value;
+                console.log(token);
+                fetch('http://localhost:4000/user/getUser', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                        // Other headers if needed
+                    }
+                })
+                    .then(response => response.json())
+                    .then((data) => {
+                        setUser(data.username);
+                        setUserID(data.userId);
+                    })
+            } catch (error) {
+                console.error('Error fetching chat status:', error);
+            }
+        };
+
+        fetchUserData();
+    }, []);
 
     const handleCreateClick = () => {
 
@@ -24,7 +52,7 @@ const ChatCreationPage = () => {
         }else{
             const postData = {
                 name: chatName,
-                userID: "ypAfGjaIrXjSRN5E1WRK"
+                userID: userID
             }
             
             fetch('http://localhost:4000/chat/create-chat', {

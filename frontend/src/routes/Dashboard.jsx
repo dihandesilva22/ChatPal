@@ -1,10 +1,38 @@
 import '../css/dashboard.css';
 import ChatList from "./ChatList";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Storage } from '@capacitor/storage';
 
 const Dashboard = () => {
 
     const [active, setActive] = useState(true);
+    const [user, setUser] = useState();
+    const [userID, setUserID] = useState();
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const token = (await Storage.get({ key: 'jwtToken' })).value;
+                console.log(token);
+                fetch('http://localhost:4000/user/getUser', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                        // Other headers if needed
+                    }
+                })
+                    .then(response => response.json())
+                    .then((data) => {
+                        setUser(data.username);
+                        setUserID(data.userId);
+                    })
+            } catch (error) {
+                console.error('Error fetching chat status:', error);
+            }
+        };
+
+        fetchUserData();
+    }, []);
 
     const handleActiveChats = () => {
         document.getElementById('active-chats').classList.add('active');
@@ -24,7 +52,7 @@ const Dashboard = () => {
             </div>
             <div className="w-full px-4 py-2">
                 <h2 className="text-2xl font-semibold py-7 text-[#001D32]">
-                    Hello User!
+                    Hello {user}!
                 </h2>
 
                 <h2 className="text-lg font-semibold py-1.5 px-3 text-[#001D32] bg-[#CDE5FF] rounded-t-md">

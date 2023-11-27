@@ -34,4 +34,31 @@ router.post('/register', (req, res) => {
     }
 })
 
+
+router.get('/getUser', (req, res) => {
+    try {
+        const authorizationHeader = req.headers['authorization'];
+
+        if (authorizationHeader) {
+            const token = authorizationHeader.split(' ')[1]; // Assuming 'Bearer <token>' format
+
+            jwt.verify(token, 'ChatPal#44', (err, decoded) => {
+                if (err) {
+                    console.error('JWT verification error:', err);
+                    res.status(401).json({ error: 'Unauthorized' });
+                } else {
+                    console.log('Decoded JWT payload:', decoded);
+                    // Now you can access the decoded payload in 'decoded' variable
+                    res.json({ state: 'success' , userID: decoded.userId, username: decoded.username});
+                }
+            });
+        } else {
+            res.status(401).json({ error: 'Unauthorized' });
+        }
+    } catch (error) {
+        console.log("There is an error", error);
+        res.status(500).json({ "Message": error });
+    }
+})
+
 module.exports = router;

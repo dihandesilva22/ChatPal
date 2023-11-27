@@ -2,9 +2,10 @@ import { MdDeleteForever } from "react-icons/md";
 import { IoSend } from "react-icons/io5";
 import { IoIosArrowBack } from "react-icons/io";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { firestore } from '../firebaseConfig';
-import { collection, query, getDoc, orderBy, onSnapshot } from "@firebase/firestore"
+import { collection, query, getDoc, orderBy, onSnapshot, where, doc } from "@firebase/firestore"
+import { Storage } from '@capacitor/storage';
 import ReceivedChatMessage from "../components/ReceivedChatMessage";
 import SentChatMessage from "../components/SentChatMessage";
 import Swal from 'sweetalert2';
@@ -13,16 +14,45 @@ import Swal from 'sweetalert2';
 const Chat = () => {
 
     const navigate = useNavigate();
-
+    const { chatID } = useParams();
     const [messages, setMessages] = useState([]);
     const [content, setContent] = useState("");
     const [status, setStatus] = useState("");
+    const [user, setUser] = useState();
+    const [userID, setUserID] = useState();
+    const [chatName, setChatName] = useState();
     const [error, setError] = useState();
+
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const token = (await Storage.get({ key: 'jwtToken' })).value;
+                console.log(token);
+                fetch('http://localhost:4000/user/getUser', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                        // Other headers if needed
+                    }
+                })
+                    .then(response => response.json())
+                    .then((data) => {
+                        setUser(data.username);
+                        setUserID(data.userId);
+                    })
+            } catch (error) {
+                console.error('Error fetching chat status:', error);
+            }
+        };
+
+        fetchUserData();
+    }, []);
 
     useEffect(() => {
         const chatMessageCollection = collection(firestore, 'chatMessages');
-
-        const orderedQuery = query(chatMessageCollection, orderBy('sentOn', 'asc'));   //order the messages according to the timestamp they have stored
+        const chatRef = doc(firestore, 'chats', chatID);
+        const orderedQuery = query(chatMessageCollection, where('chat', '==', chatRef), orderBy('sentOn', 'asc'));   //order the messages according to the timestamp the server have stored
         const unsubscribe = onSnapshot(orderedQuery, async (querySnapshot) => {
             let updatedMessages = [];
             for (const doc of querySnapshot.docs) {
@@ -66,8 +96,7 @@ const Chat = () => {
     //     }
     // }, [messages]);
 
-    const queryParams = new URLSearchParams(window.location.search);
-    const chatID = queryParams.get('id')
+
 
     useEffect(() => {
         // Fetch chat status based on the chat ID
@@ -76,6 +105,7 @@ const Chat = () => {
                 const response = await fetch(`http://localhost:4000/chat/getStatus?chatID=${chatID}`);
                 const data = await response.json();
                 setStatus(data.status); // Assuming your API response has a 'status' property
+                setChatName(data.name)
             } catch (error) {
                 console.error('Error fetching chat status:', error);
             }
@@ -93,8 +123,8 @@ const Chat = () => {
 
         // Using the Fetch API to make a POST request
         const postData = {
-            userID: "9npAJbikW2e4kdjbsMTo",
-            chatID: "hscUcabi8UpRSC132egZ",
+            userID: userID,
+            chatID: chatID,
             message: content
         }
         fetch('http://localhost:4000/chat/saveMessage', {
@@ -171,7 +201,7 @@ const Chat = () => {
                     <button className='float-left px-3 cursor-pointer'>
                         <IoIosArrowBack className='text-3xl font-semibold pt-0.5 text-[#001D32]' onClick={() => navigate('/dashboard')} />
                     </button>
-                    <h2 className="text-xl font-medium text-[#001D32]">Chat Name</h2>
+                    <h2 className="text-xl font-medium text-[#001D32]">{chatName}</h2>
                     {(
                         <button className='ml-auto'>
                             <MdDeleteForever className='text-2xl font-semibold text-[#001D32] pt-0.5'
@@ -188,30 +218,24 @@ const Chat = () => {
 
                 <div id="" className="chat-bg py-4 w-ful px-6 overflow-auto">
 
-                    {messages.map((message) => (
-                        <div className="chat-bubble max-w-[40%] bg-slate-200 rounded-tl-none rounded-xl px-4 py-2 mb-4" key={message.id}>
-                            <h4 className="font-medium text-[#006399]">{message.user}</h4>
-                            <p className="whitespace-normal text-justify">{message.content}</p>
-                            <h4 className="font-regular text-sm text-gray-500 text-right">{message.sentTime.toString().split(" ")[4]}</h4>
-                        </div>
-                    ))}
-
                     {/* Message send by others */}
-                    <ReceivedChatMessage
-                        sender={"John Doe"}
-                        message={"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto tempore eligendi recusandae nihil beatae!"}
-                        sent_time={"12:40:23"}
-                    />
+                    {messages.map((message) =>
 
-                    {/* Message send by user(me) */}
-                    <SentChatMessage
-                        message={"Ex distinctio accusamus magnam ratione? Delectus alias dolores eos ullam aut molestias facilis sint voluptatem aspernatur."}
-                        sent_time={"14:58:12"}
-                    />
+                        (message.user !== user) ? <ReceivedChatMessage
+                            sender={message.user}
+                            message={message.content}
+                            sent_time={message.sentTime.toString().split(" ")[4]}
+                        /> : <SentChatMessage
+                            message={message.content}
+                            sent_time={message.sentTime.toString().split(" ")[4]}
+                        />
+
+                    )}
+
 
                 </div>
 
-                {status ? ( 
+                {status ? (
                     <div id="message-input" className="flex fixed bottom-0 left-0 items-center px-3 py-5 gap-2 w-full bg-[#CDE5FF]">
                         <input onChange={saveContent} value={content} name="content" className="w-full border border-[#001D32] rounded-md px-3 py-1" placeholder="Type Your Message Here" />
                         <button onClick={handleClick} className="float-right bg-[#001D32] border text-white text-lg p-3 rounded-[50%] ml-auto">
