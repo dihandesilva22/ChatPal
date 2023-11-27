@@ -3,6 +3,14 @@
   "appName": "chat-pal",
   "webDir": "frontend/build",
   "server": {
-    "androidScheme": "https"
+    "androidScheme": "http",
+    "iosScheme": "http",
+    "cleartext": true
+  },
+  "android": {
+    "allowMixedContent": true
+  },
+  "ios": {
+    "allowMixedContent": true
   }
 }

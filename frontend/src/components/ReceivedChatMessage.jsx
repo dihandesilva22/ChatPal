@@ -3,7 +3,7 @@ const ReceivedChatMessage = ({ sender, message, sent_time }) => {
     return (
         <>
             {/* Message send by others */}
-            <div className="chat-bubble max-w-[40%] bg-slate-200 rounded-tl-none rounded-xl px-4 py-2 mb-4">
+            <div className="chat-bubble max-w-[40%] bg-[#D8D8D8] rounded-tl-none rounded-xl px-4 py-2 mb-4">
                 <h4 className="font-medium text-[#006399]">{sender}</h4>
                 <p className="whitespace-normal text-justify">
                     {message}

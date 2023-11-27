@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useEffect,useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IoIosArrowBack } from "react-icons/io";
 import Swal from 'sweetalert2';
 import { BiSolidError } from "react-icons/bi";
@@ -11,6 +11,8 @@ const ChatCreationPage = () => {
     const [error, setError] = useState('');
     const [user, setUser] = useState();
     const [userID, setUserID] = useState();
+
+    const ip = '192.168.62.151';
 
     const navigate = useNavigate();
 
@@ -24,18 +26,17 @@ const ChatCreationPage = () => {
             try {
                 const token = (await Storage.get({ key: 'jwtToken' })).value;
                 console.log(token);
-                fetch('http://localhost:4000/user/getUser', {
+                const response = await fetch(`http://${ip}:4000/user/getUser`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`
                         // Other headers if needed
                     }
                 })
-                    .then(response => response.json())
-                    .then((data) => {
-                        setUser(data.username);
-                        setUserID(data.userId);
-                    })
+                const data = await response.json();
+                setUser(data.username);
+                setUserID(data.userID);
+
             } catch (error) {
                 console.error('Error fetching chat status:', error);
             }
@@ -49,13 +50,15 @@ const ChatCreationPage = () => {
         if (chatName === '') {
             setError('Please enter a name for the chat');
             return;
-        }else{
+        } else {
+            console.log(userID);
             const postData = {
-                name: chatName,
-                userID: userID
+                user: userID,
+                name: chatName
+
             }
-            
-            fetch('http://localhost:4000/chat/create-chat', {
+
+            fetch(`http://${ip}:4000/chat/create-chat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -63,15 +66,15 @@ const ChatCreationPage = () => {
                 body: JSON.stringify(postData),
             })
                 .then(response => response.json())
-                .then(async data => {
-                    
+                .then(data => {
+
                     if (data.state === "successful") {
                         Swal.fire({
                             title: "New Chat Creation",
                             text: "Chat Created Successfully!",
                             icon: "success"
                         }).then(() => {
-                            navigate('/chat');
+                            navigate(`/chat/${data.chatID}`);
                         });
                     } else {
                         setError("Try again with a different name");
@@ -100,11 +103,11 @@ const ChatCreationPage = () => {
                 <div className='py-5 w-3/5'>
                     <input className='w-full px-3 py-0.5 border border-[#001D32] rounded-md' value={chatName}
                         onChange={handleChange}
-                        placeholder='Chat Name' /> 
+                        placeholder='Chat Name' />
                 </div>
 
                 <div className={`px-3 py-0.5 flex gap-1 bg-red-100 ${error === '' ? 'hidden' : ''} text-red-700 rounded`}>
-                    <BiSolidError className='font-bold text-lg pt-0.5'/>
+                    <BiSolidError className='font-bold text-lg pt-0.5' />
                     <p className='text-sm'>{error}</p>
                 </div>
 
