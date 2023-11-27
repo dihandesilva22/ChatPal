@@ -43,9 +43,10 @@ router.get('/getStatus', async (req, res) => {
 
     if (chatSnapshot.exists) {
       const chatStatus = chatSnapshot.data().status;
+      const chatName = chatSnapshot.data().name;
       console.log('Chat Status:', chatStatus);
 
-      res.status(200).json({ status: chatStatus });
+      res.status(200).json({ status: chatStatus , name: chatName});
     } else {
       console.log('Cannot get the chat status');
     }

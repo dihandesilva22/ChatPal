@@ -11,7 +11,7 @@ function App() {
       <Routes>
         <Route path='' element={<WelcomePage />}></Route>
         <Route path='/dashboard' element={<Dashboard />}></Route>  
-        <Route path='/chat' element={<Chat />}></Route>
+        <Route path='/chat/:chatID' element={<Chat />}></Route>
         <Route path='/new-chat' element={<ChatCreationPage />}></Route>
         <Route path='*' element={
           <main>
