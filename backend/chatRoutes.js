@@ -171,4 +171,25 @@ router.post('/create-chat', (req, res) => {
     }
 })
 
+
+router.put('/destroy-chat', (req, res) => {
+  try{
+      const chatID = req.body.id;
+
+      const chatCollection = db.collection('chats');
+      chatCollection.where('id', '==', chatID).get()
+
+      .then(() => {
+          chatCollection.doc(chatID).update({ status : false })
+      })
+      .then(() => {
+          console.log("Successfully destroyed the chat");
+          res.status(200).json({state: "successful"})
+      })
+  }catch(error){
+      console.log("There is an error", error);
+      res.status(500).json({"Message":error});
+  }
+})
+
 module.exports = router;

@@ -7,6 +7,7 @@ import { firestore } from '../firebaseConfig';
 import { collection, query, getDoc, orderBy, onSnapshot } from "@firebase/firestore"
 import ReceivedChatMessage from "../components/ReceivedChatMessage";
 import SentChatMessage from "../components/SentChatMessage";
+import Swal from 'sweetalert2';
 // import { useRef } from "react";
 
 const Chat = () => {
@@ -117,6 +118,50 @@ const Chat = () => {
             });
     };
 
+    //Destroy Chat for Admin
+    const handleDestroyChat = () => {
+
+        Swal.fire({
+
+            title: "Do you want to destroy the chat?",
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: "Yes",
+            denyButtonText: "No"
+
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                const updatedData = {
+                    id: "wKiYgmhb6MC4EYEVxjDI"
+                }
+
+                fetch('http://localhost:4000/chat/destroy-chat', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updatedData),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.state !== "successful") {
+                            Swal.fire("Chat cannot be destroyed at the moment", "", "info");
+                        } else {
+                            Swal.fire("Chat destroyed successfully!", "", "success");
+                            navigate('/dashboard');
+                        }
+                    })
+                    .catch(error => {
+                        console.log('Error:', error);
+                    });
+
+            } else if (result.isDenied) {
+                console.log("Canceled destroying chat");
+            }
+        });
+    };
+
     return (
         <div className="flex flex-col">
 
@@ -129,7 +174,8 @@ const Chat = () => {
                     <h2 className="text-xl font-medium text-[#001D32]">Chat Name</h2>
                     {(
                         <button className='ml-auto'>
-                            <MdDeleteForever className='text-2xl font-semibold text-[#001D32] pt-0.5' />
+                            <MdDeleteForever className='text-2xl font-semibold text-[#001D32] pt-0.5'
+                                onClick={handleDestroyChat} />
                         </button>
                     )}
 
