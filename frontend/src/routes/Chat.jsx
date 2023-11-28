@@ -25,7 +25,7 @@ const Chat = () => {
     const [error, setError] = useState();
     const [loading, setLoading] = useState(true);
 
-    const ip = '10.83.68.25';
+    const ip = process.env.REACT_APP_IP_ADDRESS;
 
     useEffect(() => {
 

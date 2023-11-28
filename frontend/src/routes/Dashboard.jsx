@@ -9,7 +9,7 @@ const Dashboard = () => {
     const [user, setUser] = useState();
     const [userID, setUserID] = useState();
 
-    const ip = '10.83.68.25';
+    const ip = process.env.REACT_APP_IP_ADDRESS;
 
     useEffect(() => {
         const fetchUserData = async () => {

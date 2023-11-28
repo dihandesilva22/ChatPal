@@ -12,7 +12,7 @@ const WelcomePage = () => {
     const [lastName, setLastName] = useState('');
     const [error, setError] = useState('');
 
-    const ip = '10.83.68.25';
+    const ip = process.env.REACT_APP_IP_ADDRESS;
 
     async function checkToken() {
         let jwtToken;
