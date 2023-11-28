@@ -4,19 +4,23 @@ import { useEffect, useState } from "react";
 const ChatList = ({ activeStatus }) => {
   const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(true); // New loading state
+  const [loading, setLoading] = useState(true); 
   const [chats, setChats] = useState([]);
   const [activeChats, setActiveChats] = useState([]);
   const [previousChats, setPreviousChats] = useState([]);
   const [requiredChats, setRequiredChats] = useState([]);
 
-  // Load all the chats
+  const ip = '192.168.62.151';
+
   useEffect(() => {
-    fetch("http://localhost:4000/chat/chat-list")
+
+    console.log(process.env);
+
+    fetch(`http://${ip}:4000/chat/chat-list`)
       .then((response) => response.json())
       .then((result) => {
         setChats(result);
-        setLoading(false); // Set loading to false when chats are loaded
+        setLoading(false);
       })
       .catch((error) =>
         console.error("Error fetching chat list:", error)

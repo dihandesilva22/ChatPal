@@ -9,12 +9,14 @@ const Dashboard = () => {
     const [user, setUser] = useState();
     const [userID, setUserID] = useState();
 
+    const ip = '192.168.62.151';
+
     useEffect(() => {
         const fetchUserData = async () => {
             try {
                 const token = (await Storage.get({ key: 'jwtToken' })).value;
                 console.log(token);
-                fetch('http://localhost:4000/user/getUser', {
+                fetch(`http://${ip}:4000/user/getUser`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`

@@ -11,8 +11,8 @@ const WelcomePage = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [error, setError] = useState('');
-    // Pseudo code for checking stored token on app launch
 
+    const ip = '192.168.62.151';
 
     async function checkToken() {
         let jwtToken;
@@ -54,7 +54,7 @@ const WelcomePage = () => {
             const postData = {
                 name: firstName + " " + lastName,
             }
-            fetch('http://localhost:4000/user/register', {
+            fetch(`http://${ip}:4000/user/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -21,15 +21,19 @@ const Chat = () => {
     const [user, setUser] = useState();
     const [userID, setUserID] = useState();
     const [chatName, setChatName] = useState();
+    const [admin, setAdmin] = useState();
     const [error, setError] = useState();
+    const [loading, setLoading] = useState(true);
 
+    const ip = '192.168.62.151';
 
     useEffect(() => {
+
         const fetchUserData = async () => {
             try {
                 const token = (await Storage.get({ key: 'jwtToken' })).value;
                 console.log(token);
-                fetch('http://localhost:4000/user/getUser', {
+                fetch(`http://${ip}:4000/user/getUser`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -39,7 +43,8 @@ const Chat = () => {
                     .then(response => response.json())
                     .then((data) => {
                         setUser(data.username);
-                        setUserID(data.userId);
+                        setUserID(data.userID);
+
                     })
             } catch (error) {
                 console.error('Error fetching chat status:', error);
@@ -74,6 +79,7 @@ const Chat = () => {
 
             // console.log(updatedMessages);
             setMessages(updatedMessages);
+            setLoading(false);
             console.log(messages);
         });
 
@@ -99,13 +105,14 @@ const Chat = () => {
 
 
     useEffect(() => {
-        // Fetch chat status based on the chat ID
+
         const fetchChatStatus = async () => {
             try {
-                const response = await fetch(`http://localhost:4000/chat/getStatus?chatID=${chatID}`);
+                const response = await fetch(`http://${ip}:4000/chat/getStatus?chatID=${chatID}`);
                 const data = await response.json();
-                setStatus(data.status); // Assuming your API response has a 'status' property
-                setChatName(data.name)
+                setStatus(data.status);
+                setChatName(data.name);
+                setAdmin(data.admin);
             } catch (error) {
                 console.error('Error fetching chat status:', error);
             }
@@ -127,7 +134,7 @@ const Chat = () => {
             chatID: chatID,
             message: content
         }
-        fetch('http://localhost:4000/chat/saveMessage', {
+        fetch(`http://${ip}:4000/chat/saveMessage`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -163,10 +170,10 @@ const Chat = () => {
             if (result.isConfirmed) {
 
                 const updatedData = {
-                    id: "wKiYgmhb6MC4EYEVxjDI"
+                    id: chatID
                 }
 
-                fetch('http://localhost:4000/chat/destroy-chat', {
+                fetch(`http://${ip}:4000/chat/destroy-chat`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -202,10 +209,10 @@ const Chat = () => {
                         <IoIosArrowBack className='text-3xl font-semibold pt-0.5 text-[#001D32]' onClick={() => navigate('/dashboard')} />
                     </button>
                     <h2 className="text-xl font-medium text-[#001D32]">{chatName}</h2>
-                    {(
-                        <button className='ml-auto'>
+                    {status && admin === userID && (
+                        <button onClick={handleDestroyChat} className='ml-auto'>
                             <MdDeleteForever className='text-2xl font-semibold text-[#001D32] pt-0.5'
-                                onClick={handleDestroyChat} />
+                            />
                         </button>
                     )}
 
@@ -218,35 +225,49 @@ const Chat = () => {
 
                 <div id="" className="chat-bg py-4 w-ful px-6 overflow-auto">
 
-                    {/* Message send by others */}
-                    {messages.map((message) =>
+                    {loading ? (
+                        <p className="text-center py-4 px-3">Loading...</p>
+                    ) : (
+                        <>
+                            {messages.length === 0 ? (
+                                <p className="text-center py-4 pl-3">No messages</p>
+                            ) :
+                                messages.map((message) =>
 
-                        (message.user !== user) ? <ReceivedChatMessage
-                            sender={message.user}
-                            message={message.content}
-                            sent_time={message.sentTime.toString().split(" ")[4]}
-                        /> : <SentChatMessage
-                            message={message.content}
-                            sent_time={message.sentTime.toString().split(" ")[4]}
-                        />
+                                    (message.user !== user) ? <ReceivedChatMessage
+                                        sender={message.user}
+                                        message={message.content}
+                                        sent_time={message.sentTime.toString().split(" ")[4]}
+                                    /> : <SentChatMessage
+                                        message={message.content}
+                                        sent_time={message.sentTime.toString().split(" ")[4]}
+                                    />
 
-                    )}
+                                )}
+                        </>)}
 
 
                 </div>
 
-                {status ? (
-                    <div id="message-input" className="flex fixed bottom-0 left-0 items-center px-3 py-5 gap-2 w-full bg-[#CDE5FF]">
-                        <input onChange={saveContent} value={content} name="content" className="w-full border border-[#001D32] rounded-md px-3 py-1" placeholder="Type Your Message Here" />
-                        <button onClick={handleClick} className="float-right bg-[#001D32] border text-white text-lg p-3 rounded-[50%] ml-auto">
-                            <IoSend />
-                        </button>
-                    </div>
+                {loading ? (
+                    <p id="message-input" className="fixed text-center bottom-0 left-0 w-full bg-[#CDE5FF] py-4 px-3">Please wait..</p>
                 ) : (
-                    <div id="message-input" className="flex fixed text-center bottom-0 left-0 items-center px-3 py-5 gap-2 w-full bg-[#CDE5FF]">
-                        <p className="">No longer available for send messages</p>
-                    </div>
-                )}
+                    <>
+                        {status ? (
+                            <div id="message-input" className="flex fixed bottom-0 left-0 items-center px-3 py-5 gap-2 w-full bg-[#CDE5FF]">
+                                <input onChange={saveContent} value={content} name="content" className="w-full border border-[#001D32] rounded-md px-3 py-1" placeholder="Type Your Message Here" />
+                                <button onClick={handleClick} className="float-right bg-[#001D32] border text-white text-lg p-3 rounded-[50%] ml-auto">
+                                    <IoSend />
+                                </button>
+                            </div>
+                        ) : (
+                            <div id="message-input" className="fixed text-center bottom-0 left-0 items-center px-3 py-5 gap-2 w-full bg-[#CDE5FF]">
+                                <p className="">No longer available for sending messages</p>
+                            </div>
+                        )}
+                    </>)}
+
+
             </div>
         </div >
     )
