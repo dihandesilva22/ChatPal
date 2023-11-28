@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "589713761723",
+    "project_id": "palchat-a79ae",
+    "storage_bucket": "palchat-a79ae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:589713761723:android:465d3b32d29f59a78b909e",
+        "android_client_info": {
+          "package_name": "com.example.chatpal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDT_m-YUpgejFwGRR5qd6LqguFrYpYvfBU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
