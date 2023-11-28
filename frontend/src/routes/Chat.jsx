@@ -25,7 +25,7 @@ const Chat = () => {
     const [error, setError] = useState();
     const [loading, setLoading] = useState(true);
 
-    const ip = '192.168.62.151';
+    const ip = '10.83.68.25';
 
     useEffect(() => {
 
@@ -233,14 +233,13 @@ const Chat = () => {
                                 <p className="text-center py-4 pl-3">No messages</p>
                             ) :
                                 messages.map((message) =>
-
                                     (message.user !== user) ? <ReceivedChatMessage
                                         sender={message.user}
                                         message={message.content}
-                                        sent_time={message.sentTime.toString().split(" ")[4]}
+                                        sent_time={message.sentTime.toString()}
                                     /> : <SentChatMessage
                                         message={message.content}
-                                        sent_time={message.sentTime.toString().split(" ")[4]}
+                                        sent_time={message.sentTime.toString()}
                                     />
 
                                 )}
