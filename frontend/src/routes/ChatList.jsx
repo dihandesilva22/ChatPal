@@ -10,7 +10,7 @@ const ChatList = ({ activeStatus }) => {
   const [previousChats, setPreviousChats] = useState([]);
   const [requiredChats, setRequiredChats] = useState([]);
 
-  const ip = '192.168.62.151';
+  const ip = '10.83.68.25';
 
   useEffect(() => {
 

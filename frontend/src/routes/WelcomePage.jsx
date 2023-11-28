@@ -12,7 +12,7 @@ const WelcomePage = () => {
     const [lastName, setLastName] = useState('');
     const [error, setError] = useState('');
 
-    const ip = '192.168.62.151';
+    const ip = '10.83.68.25';
 
     async function checkToken() {
         let jwtToken;

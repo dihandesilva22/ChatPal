@@ -1,5 +1,9 @@
 const ReceivedChatMessage = ({ sender, message, sent_time }) => {
 
+    const timeGiven = sent_time.split(" ");
+    const time = timeGiven[4].split(":")[0]+":"+timeGiven[4].split(":")[1];
+    const date = timeGiven[1]+" "+timeGiven[2]+" "+timeGiven[3];
+   
     return (
         <>
             {/* Message send by others */}
@@ -8,7 +12,8 @@ const ReceivedChatMessage = ({ sender, message, sent_time }) => {
                 <p className="whitespace-normal text-justify">
                     {message}
                 </p>
-                <h4 className="font-regular text-sm text-gray-500 text-right">{sent_time}</h4>
+                <h4 className="font-regular text-sm text-gray-500 text-right">{time}</h4>
+                <h4 className="font-regular text-xs text-gray-500 text-right">{date}</h4>
             </div>
         </>
     )
