@@ -10,11 +10,9 @@ const ChatList = ({ activeStatus }) => {
   const [previousChats, setPreviousChats] = useState([]);
   const [requiredChats, setRequiredChats] = useState([]);
 
-  const ip = '10.83.68.25';
-
+  const ip = process.env.REACT_APP_IP_ADDRESS;
+  
   useEffect(() => {
-
-    console.log(process.env);
 
     fetch(`http://${ip}:4000/chat/chat-list`)
       .then((response) => response.json())
