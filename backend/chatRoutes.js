@@ -67,59 +67,6 @@ router.get('/getStatus', async (req, res) => {
   }
 });
 
-
-
-router.get('/getAllMessages', (req, res) => {
-  try {
-    // const chatID = "hscUcabi8UpRSC132egZ";
-    // console.log(req.query.ID);
-    const chatID = req.query.ID;
-
-    const chatRef = db.collection('chats').doc(chatID);
-    const chatMessagesRef = db.collection('chatMessages');
-
-    chatMessagesRef.where('chat', '==', chatRef).orderBy('sentOn').get()
-      .then(async (snapshot) => {
-        let chatMessages = [];
-        if (snapshot.empty) {
-          console.log('No documents found in the collection.');
-          chatMessages.push("No documents found in the collection.");
-        } else {
-          // Iterate through each document
-          for (const doc of snapshot.docs) {
-            // Get all fields for each document
-            const msgDetails = {};
-            const data = doc.data();
-            msgDetails.content = data.message;
-            const sentDate = new Date(data.sentOn._seconds * 1000 + data.sentOn._nanoseconds / 1e6);
-            // Get the UTC time in milliseconds
-            const utcTime = sentDate.getTime();
-
-            // Calculate the offset in minutes
-            const offsetInMinutes = -(new Date().getTimezoneOffset());
-            const adjustedTime = utcTime + offsetInMinutes * 60 * 1000;
-            const adjustedDate = new Date(adjustedTime);
-            // console.log(adjustedDate.toLocaleDateString());
-            msgDetails.timeStamp = adjustedDate;
-
-            const userDoc = await data.user.get();
-            const username = userDoc.get('username');
-            msgDetails.user = username;
-            chatMessages.push(msgDetails);
-            // console.log(referencedData1);
-          }
-
-          res.status(200).json(chatMessages);
-          // console.log(chatMessages);
-        }
-      })
-  } catch (error) {
-    res.status(500).json({ "Message": error });
-  }
-});
-
-
-
 router.post("/saveMessage", (req, res) => {
   try {
     console.log(req.body);
