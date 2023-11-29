@@ -22,7 +22,7 @@ router.post('/register', (req, res) => {
                             };
 
                             // Sign the token with a secret key
-                            const token = jwt.sign(payload, 'ChatPal#44', { expiresIn: '30d' });
+                            const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '30d' });
                             console.log(token);
                             res.status(200).json({ "token": token, "state": "successful" });
                         })
@@ -42,7 +42,7 @@ router.get('/getUser', (req, res) => {
         if (authorizationHeader) {
             const token = authorizationHeader.split(' ')[1]; // Assuming 'Bearer <token>' format
 
-            jwt.verify(token, 'ChatPal#44', (err, decoded) => {
+            jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
                 if (err) {
                     console.error('JWT verification error:', err);
                     res.status(401).json({ error: 'Unauthorized' });
