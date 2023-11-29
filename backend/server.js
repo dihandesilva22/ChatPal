@@ -1,20 +1,17 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const chatsRouter = require('./chatRoutes.js');
 const userRouter = require('./userRoutes.js');
 
-require('dotenv').config();
-
 const app = express();
-const port = 4000;
 
 app.use(express.json()); // for parsing application/json
 app.use(cors());
 
-app.listen(port, ()=> {
-  console.log('App is listening on PORT '+port);
+app.listen(process.env.PORT, ()=> {
+  console.log(`App is listening on PORT ${process.env.PORT}`);
 })
-
 
 app.use('/chat',chatsRouter);
 app.use('/user',userRouter);
